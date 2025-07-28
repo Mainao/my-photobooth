@@ -25,13 +25,14 @@ export default function Photobooth() {
         <>
             {!capturing && capturedImages.length === 0 && (
                 <>
-                    <h1 className="text-3xl font-playfair italic">
-                        My Photobooth
-                    </h1>
+                    <h1 className="text-4xl font-italiana italic">my</h1>
+                    <h2 className="text-6xl font-asset mt-[-0.5rem]">
+                        PHOTO BOOTH
+                    </h2>
                     <div className="flex gap-4">
                         <button
                             onClick={handleStart}
-                            className="bg-[#744d28] text-white py-2 px-4 rounded hover:bg-[#5e3d1f] transition"
+                            className="mt-6 bg-[#e48bab] hover:bg-[#e1749a] text-white px-6 py-2 rounded-full font-italiana tracking-wide text-sm cursor-pointer"
                         >
                             Use Camera
                         </button>

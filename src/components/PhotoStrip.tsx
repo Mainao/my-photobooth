@@ -60,7 +60,7 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
                     <a
                         href={stripUrl}
                         download="photostrip.png"
-                        className="bg-[#592B0D] hover:bg-[#3e1f0a] text-white px-4 py-2 rounded-md shadow transition duration-200 flex items-center gap-2"
+                        className="bg-[#8f2547] hover:bg-[#8f2547] text-white font-italiana px-4 py-2 rounded-md shadow transition duration-200 flex items-center gap-2"
                     >
                         Download Photostrip
                     </a>

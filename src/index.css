@@ -1,11 +1,14 @@
 @import "tailwindcss";
 
 body {
-    @apply bg-[#f4f0e8] text-[#4a2e1e] font-sans;
-    font-family: "Space Mono", monospace;
+    @apply text-[#8f2547] bg-[#fde2e7];
+    font-family: "Italiana", serif;
 }
 
-h1,
-h2 {
-    font-family: "DM Serif Display", serif;
+.font-asset {
+    font-family: "Asset", serif;
+}
+
+.font-italiana {
+    font-family: "Italiana", serif;
 }
