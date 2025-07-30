@@ -32,7 +32,7 @@ export default function Photobooth() {
                     <div className="flex gap-4">
                         <button
                             onClick={handleStart}
-                            className="mt-6 bg-[#e48bab] hover:bg-[#e1749a] text-white px-6 py-2 rounded-full font-italiana tracking-wide text-sm cursor-pointer"
+                            className="mt-6 bg-crimson-pastel hover:bg-crimson-pastel-dark text-white px-6 py-2 rounded-full font-italiana tracking-wide text-sm cursor-pointer"
                         >
                             Use Camera
                         </button>

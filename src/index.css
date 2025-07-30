@@ -1,7 +1,23 @@
 @import "tailwindcss";
 
+:root {
+    --color-crimson: #8f2547;
+    --color-crimson-light: #fde2e7;
+    --color-crimson-pastel: #e48bab;
+    --color-crimson-pastel-dark: #e1749a;
+    --color-crimson-rose: #b34c6f;
+}
+
+@theme {
+    --color-crimson: var(--color-crimson);
+    --color-crimson-light: var(--color-crimson-light);
+    --color-crimson-pastel: var(--color-crimson-pastel);
+    --color-crimson-pastel-dark: var(--color-crimson-pastel-dark);
+    --color-crimson-rose: var(--color-crimson-rose);
+}
+
 body {
-    @apply text-[#8f2547] bg-[#fde2e7];
+    @apply text-crimson bg-crimson-light;
     font-family: "Italiana", serif;
 }
 
