@@ -15,6 +15,7 @@ function formatDate(date: Date): string {
 export default function PhotoStrip({ images }: PhotoStripProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [stripUrl, setStripUrl] = useState<string | null>(null);
+    const [slideIn, setSlideIn] = useState(false);
 
     useEffect(() => {
         if (images.length === 3) {
@@ -23,7 +24,6 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
 
                 const canvas = canvasRef.current!;
                 const canvasWidth = 400;
-
                 const photoHeight = 260;
                 const photoWidth = canvasWidth - 60;
                 const spacing = 30;
@@ -59,6 +59,7 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
                 );
 
                 setStripUrl(canvas.toDataURL("image/png"));
+                setTimeout(() => setSlideIn(true), 50);
             }, 0);
 
             return () => clearTimeout(timeout);
@@ -77,7 +78,11 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
                             <img
                                 src={stripUrl}
                                 alt="Photostrip"
-                                className="w-full rounded-sm object-cover"
+                                className={`w-full rounded-sm object-cover transform transition-all duration-1500 ease-out ${
+                                    slideIn
+                                        ? "translate-y-0 opacity-100"
+                                        : "-translate-y-20 opacity-0"
+                                }`}
                             />
                         </div>
                     </div>
