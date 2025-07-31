@@ -69,6 +69,7 @@ export default function CameraFeed({
 
     const stopCamera = () => {
         streamRef.current?.getTracks().forEach((track) => track.stop());
+        streamRef.current = null;
     };
 
     const captureImage = () => {
@@ -83,10 +84,23 @@ export default function CameraFeed({
 
         ctx.drawImage(videoRef.current, 0, 0);
 
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const red = data[i];
+            const green = data[i + 1];
+            const blue = data[i + 2];
+            const avg = 0.3 * red + 0.59 * green + 0.11 * blue;
+            data[i] = data[i + 1] = data[i + 2] = avg; // set RGB to avg
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+
         const img = new Image();
         img.onload = () => {
             onCapture(img);
-            if (photoCount >= 2) {
+            if (photoCount === 3) {
                 stopCamera();
             }
         };
@@ -97,7 +111,7 @@ export default function CameraFeed({
         <div className="relative w-[375px] h-[500px]">
             <video
                 ref={videoRef}
-                className="w-full h-full border object-cover rounded"
+                className="w-full h-full border object-cover rounded filter grayscale"
                 autoPlay
                 muted
                 playsInline
