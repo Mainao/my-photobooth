@@ -107,8 +107,14 @@ export default function CameraFeed({
         img.src = canvas.toDataURL("image/png");
     };
 
+    const getOrdinal = (n: number) => {
+        const s = ["th", "st", "nd", "rd"],
+            v = n % 100;
+        return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+
     return (
-        <div className="relative w-[375px] h-[500px]">
+        <div className="relative w-[450px] h-[600px]">
             <video
                 ref={videoRef}
                 className="w-full h-full border object-cover rounded filter grayscale"
@@ -120,11 +126,15 @@ export default function CameraFeed({
             {(showGetReady || countdown !== null) && (
                 <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center font-bold text-white bg-black/50 text-center px-4">
                     {showGetReady ? (
-                        <span className="text-xs">
-                            {`Get ready for photo ${photoCount + 1}`}
+                        <span className="text-xl font-italiana italic">
+                            {`Get ready for the ${getOrdinal(
+                                photoCount + 1
+                            )} photo`}
                         </span>
                     ) : countdown === 0 ? null : (
-                        <span className="text-4xl">{countdown}</span>
+                        <span className="text-7xl font-italiana">
+                            {countdown}
+                        </span>
                     )}
                 </div>
             )}
