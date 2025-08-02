@@ -23,9 +23,9 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
                 if (!canvasRef.current) return;
 
                 const canvas = canvasRef.current!;
-                const canvasWidth = 400;
-                const photoHeight = 260;
-                const photoWidth = canvasWidth - 60;
+                const canvasWidth = 300;
+                const photoHeight = 180;
+                const photoWidth = canvasWidth - 40;
                 const spacing = 30;
                 const topPadding = 30;
                 const bottomPadding = 80;
@@ -73,7 +73,7 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
             {stripUrl && (
                 <>
                     {/* Outer card */}
-                    <div className="bg-white rounded-xl shadow-md p-4 w-[250px] sm:w-[280px] border border-gray-200">
+                    <div className="bg-white rounded-xl shadow-md p-4 w-[300px] sm:w-[280px] border border-gray-200">
                         <div className="rounded-md p-4">
                             <img
                                 src={stripUrl}
