@@ -4,65 +4,67 @@ interface PhotoStripProps {
     images: HTMLImageElement[];
 }
 
-function formatDate(date: Date): string {
-    return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
-}
-
 export default function PhotoStrip({ images }: PhotoStripProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [stripUrl, setStripUrl] = useState<string | null>(null);
     const [slideIn, setSlideIn] = useState(false);
 
+    const drawPhotostrip = (
+        canvas: HTMLCanvasElement,
+        images: HTMLImageElement[],
+        date: string
+    ): string => {
+        const ctx = canvas.getContext("2d")!;
+        const canvasWidth = 360;
+        const photoHeight = 240;
+        const photoWidth = canvasWidth - 60;
+        const spacing = 30;
+        const topPadding = 30;
+        const bottomPadding = 80;
+
+        const canvasHeight =
+            topPadding +
+            (photoHeight + spacing) * images.length -
+            spacing +
+            bottomPadding;
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        ctx.fillStyle = "#FEE7EA";
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        images.forEach((img, i) => {
+            const x = (canvasWidth - photoWidth) / 2;
+            const y = topPadding + i * (photoHeight + spacing);
+            ctx.drawImage(img, x, y, photoWidth, photoHeight);
+        });
+
+        ctx.fillStyle = "#8f2547";
+        ctx.font = "bold 20px Italiana, serif";
+        ctx.textAlign = "center";
+        ctx.fillText(date, canvasWidth / 2, canvasHeight - 30);
+
+        return canvas.toDataURL("image/png");
+    };
+
+    const formatDate = (date: Date): string => {
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    };
+
     useEffect(() => {
-        if (images.length === 3) {
-            const timeout = setTimeout(() => {
-                if (!canvasRef.current) return;
-
-                const canvas = canvasRef.current!;
-                const canvasWidth = 300;
-                const photoHeight = 180;
-                const photoWidth = canvasWidth - 40;
-                const spacing = 30;
-                const topPadding = 30;
-                const bottomPadding = 80;
-
-                const canvasHeight =
-                    topPadding +
-                    (photoHeight + spacing) * images.length -
-                    spacing +
-                    bottomPadding;
-
-                canvas.width = canvasWidth;
-                canvas.height = canvasHeight;
-
-                const ctx = canvas.getContext("2d")!;
-                ctx.fillStyle = "#FEE7EA";
-                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-                images.forEach((img, i) => {
-                    const x = (canvasWidth - photoWidth) / 2;
-                    const y = topPadding + i * (photoHeight + spacing);
-                    ctx.drawImage(img, x, y, photoWidth, photoHeight);
-                });
-
-                ctx.fillStyle = "#8f2547";
-                ctx.font = "bold 20px Italiana, serif";
-                ctx.textAlign = "center";
-                ctx.fillText(
-                    formatDate(new Date()),
-                    canvasWidth / 2,
-                    canvasHeight - 30
-                );
-
-                setStripUrl(canvas.toDataURL("image/png"));
-                setTimeout(() => setSlideIn(true), 50);
-            }, 0);
-
-            return () => clearTimeout(timeout);
+        if (images.length === 3 && canvasRef.current) {
+            const url = drawPhotostrip(
+                canvasRef.current,
+                images,
+                formatDate(new Date())
+            );
+            setStripUrl(url);
+            setTimeout(() => setSlideIn(true), 50);
         }
     }, [images]);
 
