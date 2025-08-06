@@ -20,7 +20,7 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
         const photoWidth = canvasWidth - 60;
         const spacing = 30;
         const topPadding = 30;
-        const bottomPadding = 80;
+        const bottomPadding = 100;
 
         const canvasHeight =
             topPadding +
