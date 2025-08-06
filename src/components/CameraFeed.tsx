@@ -13,9 +13,11 @@ export default function CameraFeed({
 }: CameraFeedProps) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const streamRef = useRef<MediaStream | null>(null);
+    const hasFlashedRef = useRef(false);
 
     const [showGetReady, setShowGetReady] = useState(false);
     const [countdown, setCountdown] = useState<number | null>(null);
+    const [flash, setFlash] = useState(false);
 
     useEffect(() => {
         if (capturing) startCamera();
@@ -41,29 +43,54 @@ export default function CameraFeed({
     useEffect(() => {
         if (countdown === null || countdown < 0) return;
 
-        if (countdown === 0) {
-            captureImage();
-            return;
+        if (countdown > 1) {
+            const timer = setTimeout(() => {
+                setCountdown((prev) => (prev ?? 1) - 1);
+            }, 1000);
+            return () => clearTimeout(timer);
         }
 
-        const timer = setTimeout(() => {
-            setCountdown((prev) => (prev ?? 1) - 1);
-        }, 1000);
+        if (countdown === 1 && !hasFlashedRef.current) {
+            hasFlashedRef.current = true;
 
-        return () => clearTimeout(timer);
+            let cleanupFlashTimeout: ReturnType<typeof setTimeout>;
+
+            const waitBeforeFlash = setTimeout(() => {
+                setFlash(true);
+
+                cleanupFlashTimeout = setTimeout(() => {
+                    setFlash(false);
+                    setCountdown(0);
+                }, 150);
+            }, 1000);
+
+            return () => {
+                clearTimeout(waitBeforeFlash);
+                clearTimeout(cleanupFlashTimeout);
+            };
+        }
+
+        if (countdown === 0) {
+            captureImage();
+            hasFlashedRef.current = false;
+        }
     }, [countdown]);
 
     const startCamera = async () => {
-        streamRef.current = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 1280 },
-                height: { ideal: 720 },
-            },
-        });
+        try {
+            streamRef.current = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 },
+                },
+            });
 
-        if (videoRef.current) {
-            videoRef.current.srcObject = streamRef.current;
-            await videoRef.current.play();
+            if (videoRef.current) {
+                videoRef.current.srcObject = streamRef.current;
+                await videoRef.current.play();
+            }
+        } catch (error) {
+            console.error("Camera access error:", error);
         }
     };
 
@@ -86,30 +113,26 @@ export default function CameraFeed({
 
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imageData.data;
-
         for (let i = 0; i < data.length; i += 4) {
             const red = data[i];
             const green = data[i + 1];
             const blue = data[i + 2];
             const avg = 0.3 * red + 0.59 * green + 0.11 * blue;
-            data[i] = data[i + 1] = data[i + 2] = avg; // set RGB to avg
+            data[i] = data[i + 1] = data[i + 2] = avg;
         }
-
         ctx.putImageData(imageData, 0, 0);
 
         const img = new Image();
         img.onload = () => {
             onCapture(img);
-            if (photoCount === 3) {
-                stopCamera();
-            }
+            if (photoCount === 3) stopCamera();
         };
         img.src = canvas.toDataURL("image/png");
     };
 
     const getOrdinal = (n: number) => {
-        const s = ["th", "st", "nd", "rd"],
-            v = n % 100;
+        const s = ["th", "st", "nd", "rd"];
+        const v = n % 100;
         return n + (s[(v - 20) % 10] || s[v] || s[0]);
     };
 
@@ -122,6 +145,10 @@ export default function CameraFeed({
                 muted
                 playsInline
             />
+
+            {flash && (
+                <div className="absolute inset-0 bg-white opacity-80 z-50 pointer-events-none animate-fade-out" />
+            )}
 
             {(showGetReady || countdown !== null) && (
                 <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center font-bold text-white bg-black/50 text-center px-4">

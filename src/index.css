@@ -20,3 +20,16 @@ body {
 .font-italiana {
     font-family: "Italiana", serif;
 }
+
+@keyframes fade-out {
+    from {
+        opacity: 0.8;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.animate-fade-out {
+    animation: fade-out 0.15s ease-out;
+}
