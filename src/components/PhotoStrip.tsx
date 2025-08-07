@@ -31,7 +31,7 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        ctx.fillStyle = "#FEE7EA";
+        ctx.fillStyle = "#fdf3e7";
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
         images.forEach((img, i) => {
@@ -40,8 +40,8 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
             ctx.drawImage(img, x, y, photoWidth, photoHeight);
         });
 
-        ctx.fillStyle = "#8f2547";
-        ctx.font = "bold 20px Italiana, serif";
+        ctx.fillStyle = "#784532";
+        ctx.font = "25px Cormorant, serif";
         ctx.textAlign = "center";
         ctx.fillText(date, canvasWidth / 2, canvasHeight - 30);
 
@@ -93,7 +93,7 @@ export default function PhotoStrip({ images }: PhotoStripProps) {
                     <a
                         href={stripUrl}
                         download="photostrip.png"
-                        className="bg-crimson hover:bg-crimson-rose text-white font-italiana px-6 py-2 rounded-md shadow transition duration-200"
+                        className="mt-8 bg-brown hover:bg-gray text-white px-6 py-4 rounded-full font-red-hat font-light tracking-wide text-sm cursor-pointer uppercase transition duration-300"
                     >
                         Download Photostrip
                     </a>

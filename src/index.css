@@ -1,24 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-    --color-crimson: #8f2547;
-    --color-crimson-light: #fde2e7;
-    --color-crimson-pastel: #e48bab;
-    --color-crimson-pastel-dark: #e1749a;
-    --color-crimson-rose: #b34c6f;
+    --color-peach-cream: #fdf3e7;
+    --color-brown: #784532;
+    --color-gray: #383838;
 }
 
 body {
-    @apply text-crimson bg-crimson-light;
-    font-family: "Italiana", serif;
+    @apply text-brown bg-peach-cream;
 }
 
-.font-asset {
-    font-family: "Asset", serif;
+.font-cormorant {
+    font-family: "Cormorant", serif;
 }
 
-.font-italiana {
-    font-family: "Italiana", serif;
+.font-red-hat {
+    font-family: "Red Hat Text", sans-serif;
 }
 
 @keyframes fade-out {

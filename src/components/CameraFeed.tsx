@@ -131,9 +131,9 @@ export default function CameraFeed({
     };
 
     const getOrdinal = (n: number) => {
-        const s = ["th", "st", "nd", "rd"];
-        const v = n % 100;
-        return n + (s[(v - 20) % 10] || s[v] || s[0]);
+        const suffixes = ["th", "st", "nd", "rd"];
+        const value = n >= 13 && n <= 19 ? 0 : n % 10;
+        return n + suffixes[value];
     };
 
     return (
@@ -151,15 +151,15 @@ export default function CameraFeed({
             )}
 
             {(showGetReady || countdown !== null) && (
-                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center font-bold text-white bg-black/50 text-center px-4">
+                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-white bg-black/50 text-center px-4">
                     {showGetReady ? (
-                        <span className="text-xl font-italiana italic">
+                        <span className="text-xl font-cormorant italic">
                             {`Get ready for the ${getOrdinal(
                                 photoCount + 1
                             )} photo`}
                         </span>
                     ) : countdown === 0 ? null : (
-                        <span className="text-7xl font-italiana">
+                        <span className="text-7xl font-red-hat">
                             {countdown}
                         </span>
                     )}
